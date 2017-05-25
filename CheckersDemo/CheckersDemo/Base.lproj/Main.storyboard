@@ -77,6 +77,7 @@
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="currentTurnLabel" destination="Leo-2R-1pe" id="mz6-Ce-ict"/>
+                        <outlet property="turnForLabel" destination="IqP-Ok-nC9" id="x4m-To-bYa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

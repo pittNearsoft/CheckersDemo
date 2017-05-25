@@ -17,6 +17,7 @@ class ViewController: UIViewController {
   let numberOfPiecesPerColor  = 12
   var boardView = UIView()
   
+  @IBOutlet weak var turnForLabel: UILabel!
   
   var currentTurn = PieceColor.red
   @IBOutlet weak var currentTurnLabel: UILabel!
@@ -147,12 +148,15 @@ class ViewController: UIViewController {
       currentTurnLabel.text = "Red"
     }
     
+    
+    
     let opponentPieces = RuleManager.pieces.filter { $0.pieceColor == currentTurn}
     
     for piece in opponentPieces {
       piece.isUserInteractionEnabled = true
     }
     
+
   }
   
   func checkIfGameEnds() {
@@ -168,8 +172,13 @@ class ViewController: UIViewController {
       
       let message = (currentTurn == .red) ? "Blue Wins!" : "Red Wins!"
       
-      UIAlertController(title: "Game Over!", message: message, preferredStyle: .alert)
-      .addAction(OKAction)
+      turnForLabel.text = message
+      currentTurnLabel.text = ""
+      
+      let alert = UIAlertController(title: "Game Over!", message: message, preferredStyle: .alert)
+      alert.addAction(OKAction)
+      
+      present(alert, animated: true, completion: nil)
     }
   }
   
