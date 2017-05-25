@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="ipad9_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="CheckersDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="fondo" translatesAutoresizingMaskIntoConstraints="NO" id="jd8-KQ-11I">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggL-du-wcX">
+                                <rect key="frame" x="744" y="264" width="260" height="240"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="blackboard" translatesAutoresizingMaskIntoConstraints="NO" id="wrb-d0-0sG">
+                                        <rect key="frame" x="0.0" y="0.0" width="260" height="240"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turn for:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IqP-Ok-nC9">
+                                        <rect key="frame" x="8" y="28" width="244" height="62"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="62" id="2pz-hP-Ppy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="35"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Red" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Leo-2R-1pe">
+                                        <rect key="frame" x="8" y="89" width="244" height="62"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="62" id="Cfs-bl-Yfu"/>
+                                            <constraint firstAttribute="height" constant="62" id="rI9-aU-TDk"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Chalkduster" family="Chalkduster" pointSize="35"/>
+                                        <color key="textColor" red="0.81176470590000005" green="0.13725490200000001" blue="0.16078431369999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.55198147650136697" green="0.67147344961884992" blue="0.69962527687512688" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="IqP-Ok-nC9" secondAttribute="trailing" constant="8" id="1YU-7b-afy"/>
+                                    <constraint firstAttribute="bottom" secondItem="wrb-d0-0sG" secondAttribute="bottom" id="A4X-Pj-9rJ"/>
+                                    <constraint firstAttribute="height" constant="240" id="DsZ-Cj-yzL"/>
+                                    <constraint firstAttribute="trailing" secondItem="Leo-2R-1pe" secondAttribute="trailing" constant="8" id="E4H-av-x5F"/>
+                                    <constraint firstItem="Leo-2R-1pe" firstAttribute="centerY" secondItem="ggL-du-wcX" secondAttribute="centerY" id="FCm-79-xPh"/>
+                                    <constraint firstItem="IqP-Ok-nC9" firstAttribute="leading" secondItem="ggL-du-wcX" secondAttribute="leading" constant="8" id="ITh-Dx-3E0"/>
+                                    <constraint firstAttribute="trailing" secondItem="wrb-d0-0sG" secondAttribute="trailing" id="RoG-ws-mIB"/>
+                                    <constraint firstItem="IqP-Ok-nC9" firstAttribute="top" secondItem="ggL-du-wcX" secondAttribute="top" constant="28" id="WBQ-qE-Z56"/>
+                                    <constraint firstAttribute="width" constant="260" id="cRk-h0-kwS"/>
+                                    <constraint firstItem="Leo-2R-1pe" firstAttribute="leading" secondItem="ggL-du-wcX" secondAttribute="leading" constant="8" id="ce5-aG-ME0"/>
+                                    <constraint firstItem="wrb-d0-0sG" firstAttribute="leading" secondItem="ggL-du-wcX" secondAttribute="leading" id="fRw-VW-MQn"/>
+                                    <constraint firstItem="wrb-d0-0sG" firstAttribute="top" secondItem="ggL-du-wcX" secondAttribute="top" id="gWO-d8-OLb"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ggL-du-wcX" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="4af-cC-y4f"/>
+                            <constraint firstAttribute="trailing" secondItem="ggL-du-wcX" secondAttribute="trailing" constant="20" id="YR2-Pf-lqe"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="33.984375" y="43.75"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="blackboard" width="545" height="391"/>
+        <image name="fondo" width="866" height="606"/>
+    </resources>
+</document>
