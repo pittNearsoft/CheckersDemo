@@ -17,6 +17,11 @@ class ViewController: UIViewController {
   let numberOfPiecesPerColor  = 12
   var boardView = UIView()
   
+  
+  var currentTurn = PieceColor.red
+  @IBOutlet weak var currentTurnLabel: UILabel!
+		
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -60,6 +65,10 @@ class ViewController: UIViewController {
 
     let piece = gestureRecognizer.view! as! Piece
     
+    guard piece.pieceColor == currentTurn else {
+      return
+    }
+    
     if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
       view.bringSubview(toFront: piece)
       
@@ -102,9 +111,15 @@ class ViewController: UIViewController {
       let position = BoardPosition(row: row, column: column)
       if piece.canMove(to: position) {
         piece.move(to: position)
-        
+        changeTurn()
       }else if piece.canEat(in: position){
         piece.eat(at: position)
+        
+        if !piece.canEatAgain() {
+          checkIfGameEnds()
+        }
+        
+        
       }else{
         piece.returnToOriginalPosition()
       }
@@ -114,6 +129,50 @@ class ViewController: UIViewController {
   }
   
   //MARK: - Helpers
+  func changeTurn() {
+    
+    let pieces = RuleManager.pieces.filter { $0.pieceColor == currentTurn}
+    
+    for piece in pieces {
+      piece.isUserInteractionEnabled = false
+    }
+
+    if currentTurn == .red {
+      currentTurn = .blue
+      currentTurnLabel.textColor = .blue
+      currentTurnLabel.text = "Blue"
+    }else{
+      currentTurn = .red
+      currentTurnLabel.textColor = .red
+      currentTurnLabel.text = "Red"
+    }
+    
+    let opponentPieces = RuleManager.pieces.filter { $0.pieceColor == currentTurn}
+    
+    for piece in opponentPieces {
+      piece.isUserInteractionEnabled = true
+    }
+    
+  }
+  
+  func checkIfGameEnds() {
+    
+    changeTurn()
+    
+    let pieces = RuleManager.pieces.filter { $0.pieceColor == currentTurn}
+    
+    if pieces.count == 0 {
+      let OKAction = UIAlertAction(title: "OK", style: .default) { action in
+        // ...
+      }
+      
+      let message = (currentTurn == .red) ? "Blue Wins!" : "Red Wins!"
+      
+      UIAlertController(title: "Game Over!", message: message, preferredStyle: .alert)
+      .addAction(OKAction)
+    }
+  }
+  
   func bringPiecesToFront() {
     for piece in RuleManager.pieces {
       view.bringSubview(toFront: piece)

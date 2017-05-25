@@ -57,6 +57,32 @@ extension Piece {
     return false
   }
   
+  func canEatAgain() -> Bool {
+    
+    if self.pieceColor == .red {
+      
+      if self.boardPosition.row > 1 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row - 1][self.boardPosition.column - 1] == .blue && RuleManager.boardLocation[self.boardPosition.row - 2][self.boardPosition.column - 2] == .free{
+        return true
+      }
+      
+      if self.boardPosition.row > 1 && self.boardPosition.column < 6 && RuleManager.boardLocation[self.boardPosition.row - 1][self.boardPosition.column + 1] == .blue && RuleManager.boardLocation[self.boardPosition.row - 2][self.boardPosition.column + 2] == .free{
+        return true
+      }
+      
+    }else{
+      if self.boardPosition.row < 6 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column - 1] == .red && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column - 2] == .free{
+        return true
+      }
+      
+      if self.boardPosition.row < 6 && self.boardPosition.column < 6 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column + 1] == .red && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column + 2] == .free{
+        return true
+      }
+    }
+    
+    
+    return false
+  }
+  
   func canMove(to position: BoardPosition) -> Bool {
 
     guard RuleManager.boardLocation[position.row][position.column] == .free
