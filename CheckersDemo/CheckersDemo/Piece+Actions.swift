@@ -21,7 +21,15 @@ extension Piece {
       }
       
       
-      if RuleManager.boardLocation[position.row - 1][position.column + 1] == .blue || RuleManager.boardLocation[position.row - 1][position.column - 1] == .blue {
+      if position.row < 7 && position.column < 7 &&  RuleManager.boardLocation[position.row + 1][position.column + 1] == .blue
+        && self.boardPosition.row == position.row + 2
+        && self.boardPosition.column == position.column + 2{
+        return true
+      }
+      
+      if position.row < 7 && position.column > 0 &&  RuleManager.boardLocation[position.row + 1][position.column - 1] == .blue
+        && self.boardPosition.row == position.row + 2
+        && self.boardPosition.column == position.column - 2{
         return true
       }
       
@@ -30,9 +38,18 @@ extension Piece {
         return false
       }
       
-      if RuleManager.boardLocation[position.row + 1][position.column + 1] == .red || RuleManager.boardLocation[position.row + 1][position.column - 1] == .red {
+      if position.row > 0 && position.column < 7 &&  RuleManager.boardLocation[position.row - 1][position.column + 1] == .red
+        && self.boardPosition.row == position.row - 2
+        && self.boardPosition.column == position.column + 2{
         return true
       }
+      
+      if position.row > 0 && position.column > 0 && RuleManager.boardLocation[position.row - 1][position.column - 1] == .red
+        && self.boardPosition.row  == position.row - 2
+        && self.boardPosition.column == position.column - 2 {
+        return true
+      }
+      
     }
     
     
@@ -83,13 +100,74 @@ extension Piece {
     }
   }
   
-  private func eat(Piece piece: Piece) {
+  private func eat(atPosition position: BoardPosition) {
+    
+
+    
+    
+    //Eating Red
+    if position.row > 0 && position.column < 7 && RuleManager.boardLocation[position.row - 1][position.column + 1] == .red
+      && self.boardPosition.row == position.row - 2
+      && self.boardPosition.column == position.column + 2{
+      
+      RuleManager.boardLocation[position.row - 1][position.column + 1] = .free
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column + 1}.first!
+      piece.removeFromSuperview()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    if  position.row > 0 && position.column > 0 && RuleManager.boardLocation[position.row - 1][position.column - 1] == .red
+      && self.boardPosition.row  == position.row - 2
+      && self.boardPosition.column == position.column - 2 {
+      RuleManager.boardLocation[position.row - 1][position.column - 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column - 1}.first!
+      piece.removeFromSuperview()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+
+      return
+    }
+    
+    //Eating blue
+    if  position.row < 7 && position.column < 7 && RuleManager.boardLocation[position.row + 1][position.column + 1] == .blue
+      && self.boardPosition.row == position.row + 2
+      && self.boardPosition.column == position.column + 2{
+      
+      RuleManager.boardLocation[position.row + 1][position.column + 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column + 1}.first!
+      piece.removeFromSuperview()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    if  position.row < 7 && position.column > 0 && RuleManager.boardLocation[position.row + 1][position.column - 1] == .blue
+      && self.boardPosition.row == position.row + 2
+      && self.boardPosition.column == position.column - 2{
+      
+      RuleManager.boardLocation[position.row + 1][position.column - 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column - 1}.first!
+      piece.removeFromSuperview()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
     
   }
   
-  func move(to position: BoardPosition, AndEatPiece piece: Piece) {
+  func eat(at position: BoardPosition) {
+    
+    eat(atPosition: position)
     move(to: position)
-    eat(Piece: piece)
   }
   
 }

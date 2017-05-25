@@ -21,6 +21,8 @@ class RuleManager {
   
   static var boardCells = [String: UIView]()
   
+  static var pieces: [Piece] = []
+  
 }
 
 enum BoardLocation {

@@ -13,9 +13,6 @@ class ViewController: UIViewController {
   let numViewPerRow = 8
   var selectedView: UIView?
   let width: CGFloat = 80
-  var piecesRed: [Piece] = []
-  
-  var piecesBlue: [Piece] = []
   
   let numberOfPiecesPerColor  = 12
   var boardView = UIView()
@@ -107,7 +104,7 @@ class ViewController: UIViewController {
         piece.move(to: position)
         
       }else if piece.canEat(in: position){
-        print("It can eat!")
+        piece.eat(at: position)
       }else{
         piece.returnToOriginalPosition()
       }
@@ -118,18 +115,14 @@ class ViewController: UIViewController {
   
   //MARK: - Helpers
   func bringPiecesToFront() {
-    for piece in piecesBlue {
-      view.bringSubview(toFront: piece)
-    }
-    
-    for piece in piecesRed {
+    for piece in RuleManager.pieces {
       view.bringSubview(toFront: piece)
     }
   }
   
   func addPieceToBoard(WithColor color: PieceColor, position: BoardPosition, onBoardCell boardCell: UIView) {
     let piece = Piece(WithBoardPosition: position, andColor: color, onCellView: boardCell, boardView: self.view)
-    piecesRed.append(piece)
+    RuleManager.pieces.append(piece)
     piece.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
   }
   
