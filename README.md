@@ -1,0 +1,2 @@
+# CheckersDemo
+Minimax Algorithm
