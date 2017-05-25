@@ -112,7 +112,9 @@ extension Piece {
       
       RuleManager.boardLocation[position.row - 1][position.column + 1] = .free
       let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column + 1}.first!
-      piece.removeFromSuperview()
+      
+      piece.removeFromBoard()
+      
       let indexPiece = RuleManager.pieces.index(of: piece)
       RuleManager.pieces.remove(at: indexPiece!)
       
@@ -125,7 +127,7 @@ extension Piece {
       RuleManager.boardLocation[position.row - 1][position.column - 1] = .free
       
       let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column - 1}.first!
-      piece.removeFromSuperview()
+      piece.removeFromBoard()
       let indexPiece = RuleManager.pieces.index(of: piece)
       RuleManager.pieces.remove(at: indexPiece!)
 
@@ -140,7 +142,7 @@ extension Piece {
       RuleManager.boardLocation[position.row + 1][position.column + 1] = .free
       
       let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column + 1}.first!
-      piece.removeFromSuperview()
+      piece.removeFromBoard()
       let indexPiece = RuleManager.pieces.index(of: piece)
       RuleManager.pieces.remove(at: indexPiece!)
       
@@ -154,7 +156,7 @@ extension Piece {
       RuleManager.boardLocation[position.row + 1][position.column - 1] = .free
       
       let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column - 1}.first!
-      piece.removeFromSuperview()
+      piece.removeFromBoard()
       let indexPiece = RuleManager.pieces.index(of: piece)
       RuleManager.pieces.remove(at: indexPiece!)
       
@@ -168,6 +170,14 @@ extension Piece {
     
     eat(atPosition: position)
     move(to: position)
+  }
+  
+  private func removeFromBoard(){
+    UIView.animate(withDuration: 0.3, animations: {
+      self.alpha = 0.0
+    }, completion: { _ in
+      self.removeFromSuperview()
+    })
   }
   
 }
