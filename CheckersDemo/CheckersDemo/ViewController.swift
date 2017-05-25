@@ -32,53 +32,33 @@ class ViewController: UIViewController {
     
     for row in 0..<8 {
       for column in 0..<numViewPerRow {
-        let cellView = UIView()
-        cellView.backgroundColor =  ((column%2 == 0 && row%2==1) || (column%2 == 1 && row%2==0)) ? .black : .white
-        cellView.frame = CGRect(x: CGFloat(column)*width + 50, y: CGFloat(row)*width  + 50, width: width, height: width)
-        cellView.layer.borderWidth = 0.5
-        cellView.layer.borderColor = UIColor.black.cgColor
-        view.addSubview(cellView)
-        
-        if cellView.backgroundColor == .black {
-          let background = UIImageView(frame: cellView.frame)
-          background.image = #imageLiteral(resourceName: "wood")
-          background.frame.origin = CGPoint(x: 0, y: 0)
-          cellView.addSubview(background)
-        }else{
-          
-          if indexBlue < numberOfPiecesPerColor && row <= 2{
-            let piece = Piece(WithBoardPosition: BoardPosition(row: row, column: column) , andColor: .blue, onCellView: cellView, boardView: self.view)
-            piecesBlue.append(piece)
 
-            piece.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+        let boardCell = createBoardCell(inRow: row, column: column)
+        
+        if boardCell.backgroundColor == .black {
+          addBackground(ToBoardCell: boardCell)
+        }else{
+          if indexBlue < numberOfPiecesPerColor && row <= 2{
+            addPieceToBoard(WithColor: .blue, position: BoardPosition(row: row, column: column), onBoardCell: boardCell)
             indexBlue += 1
           }else if indexRed < numberOfPiecesPerColor && row >= 5 {
-            let piece = Piece(WithBoardPosition: BoardPosition(row: row, column: column) , andColor: .red, onCellView: cellView, boardView: self.view)
-            
-            piecesRed.append(piece)
-
-            piece.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+            addPieceToBoard(WithColor: .red, position: BoardPosition(row: row, column: column), onBoardCell: boardCell)
             indexRed += 1
           }
-          
         }
 
         
         let key = "\(column)|\(row)"
-        RuleManager.boardCells[key] = cellView
+        RuleManager.boardCells[key] = boardCell
       }
     }
     
-    for piece in piecesBlue {
-      view.bringSubview(toFront: piece)
-    }
-    
-    for piece in piecesRed {
-      view.bringSubview(toFront: piece)
-    }
+    bringPiecesToFront()
     
   }
   
+  
+  // MARK: - Gesture Methods
   func handlePan(_ gestureRecognizer: UIPanGestureRecognizer) {
 
     let piece = gestureRecognizer.view! as! Piece
@@ -132,6 +112,41 @@ class ViewController: UIViewController {
 
       
     }
+  }
+  
+  //MARK: - Helpers
+  func bringPiecesToFront() {
+    for piece in piecesBlue {
+      view.bringSubview(toFront: piece)
+    }
+    
+    for piece in piecesRed {
+      view.bringSubview(toFront: piece)
+    }
+  }
+  
+  func addPieceToBoard(WithColor color: PieceColor, position: BoardPosition, onBoardCell boardCell: UIView) {
+    let piece = Piece(WithBoardPosition: position, andColor: color, onCellView: boardCell, boardView: self.view)
+    piecesRed.append(piece)
+    piece.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handlePan)))
+  }
+  
+  func createBoardCell(inRow row: Int, column: Int) -> UIView {
+    let boardCell = UIView()
+    boardCell.backgroundColor =  ((column%2 == 0 && row%2==1) || (column%2 == 1 && row%2==0)) ? .black : .white
+    boardCell.frame = CGRect(x: CGFloat(column)*width + 50, y: CGFloat(row)*width  + 50, width: width, height: width)
+    boardCell.layer.borderWidth = 0.5
+    boardCell.layer.borderColor = UIColor.black.cgColor
+    view.addSubview(boardCell)
+    
+    return boardCell
+  }
+  
+  func addBackground(ToBoardCell boardCell: UIView) {
+    let background = UIImageView(frame: boardCell.frame)
+    background.image = #imageLiteral(resourceName: "wood")
+    background.frame.origin = CGPoint(x: 0, y: 0)
+    boardCell.addSubview(background)
   }
   
 }
