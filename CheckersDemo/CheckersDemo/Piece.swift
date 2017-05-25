@@ -12,7 +12,14 @@ class Piece: UIView {
   private var imageView = UIImageView()
   var boardPosition = BoardPosition(row: 0, column: 0)
   var pieceColor: PieceColor = .red
-  
+  var isKing = false {
+    willSet{
+      if newValue == true {
+        imageView.image = (pieceColor == .red) ?  #imageLiteral(resourceName: "crownRed") : #imageLiteral(resourceName: "crownBlue")
+      }
+    }
+  }
+		
   init(WithBoardPosition position: BoardPosition,andColor color: PieceColor, onCellView cellView: UIView, boardView: UIView) {
     super.init(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
 

@@ -15,8 +15,10 @@ extension Piece {
     
     
     
-    if self.pieceColor == .red {
-      guard self.boardPosition.row == position.row + 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)  else {
+    if self.pieceColor == .red{
+      guard self.boardPosition.row == position.row + 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)
+          || (self.isKing && self.boardPosition.row == position.row - 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2))
+        else {
         return false
       }
       
@@ -33,10 +35,29 @@ extension Piece {
         return true
       }
       
-    }else{
-      guard self.boardPosition.row == position.row - 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)  else {
+      
+      
+      if self.isKing && position.row > 0 && position.column < 7 &&  RuleManager.boardLocation[position.row - 1][position.column + 1] == .blue
+        && self.boardPosition.row == position.row - 2
+        && self.boardPosition.column == position.column + 2{
+        return true
+      }
+      
+      if self.isKing && position.row > 0 && position.column > 0 && RuleManager.boardLocation[position.row - 1][position.column - 1] == .blue
+        && self.boardPosition.row  == position.row - 2
+        && self.boardPosition.column == position.column - 2 {
+        return true
+      }
+      
+    }
+    
+    if self.pieceColor == .blue{
+      guard self.boardPosition.row == position.row - 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)
+        || (self.isKing && self.boardPosition.row == position.row + 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2))
+        else {
         return false
       }
+      
       
       if position.row > 0 && position.column < 7 &&  RuleManager.boardLocation[position.row - 1][position.column + 1] == .red
         && self.boardPosition.row == position.row - 2
@@ -50,6 +71,19 @@ extension Piece {
         return true
       }
       
+      
+      if  self.isKing && position.row < 7 && position.column < 7 &&  RuleManager.boardLocation[position.row + 1][position.column + 1] == .red
+        && self.boardPosition.row == position.row + 2
+        && self.boardPosition.column == position.column + 2{
+        return true
+      }
+      
+      if  self.isKing && position.row < 7 && position.column > 0 &&  RuleManager.boardLocation[position.row + 1][position.column - 1] == .red
+        && self.boardPosition.row == position.row + 2
+        && self.boardPosition.column == position.column - 2{
+        return true
+      }
+      
     }
     
     
@@ -59,7 +93,7 @@ extension Piece {
   
   func canEatAgain() -> Bool {
     
-    if self.pieceColor == .red {
+    if self.pieceColor == .red{
       
       if self.boardPosition.row > 1 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row - 1][self.boardPosition.column - 1] == .blue && RuleManager.boardLocation[self.boardPosition.row - 2][self.boardPosition.column - 2] == .free{
         return true
@@ -69,12 +103,34 @@ extension Piece {
         return true
       }
       
-    }else{
+      
+      
+      if self.isKing && self.boardPosition.row < 6 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column - 1] == .blue && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column - 2] == .free{
+        return true
+      }
+      
+      if self.isKing && self.boardPosition.row < 6 && self.boardPosition.column < 6 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column + 1] == .blue && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column + 2] == .free {
+        return true
+      }
+      
+      
+    }
+    
+    if self.pieceColor == .blue{
       if self.boardPosition.row < 6 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column - 1] == .red && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column - 2] == .free{
         return true
       }
       
       if self.boardPosition.row < 6 && self.boardPosition.column < 6 && RuleManager.boardLocation[self.boardPosition.row + 1][self.boardPosition.column + 1] == .red && RuleManager.boardLocation[self.boardPosition.row + 2][self.boardPosition.column + 2] == .free{
+        return true
+      }
+      
+      
+      if self.isKing &&  self.boardPosition.row > 1 && self.boardPosition.column > 1 && RuleManager.boardLocation[self.boardPosition.row - 1][self.boardPosition.column - 1] == .red && RuleManager.boardLocation[self.boardPosition.row - 2][self.boardPosition.column - 2] == .free{
+        return true
+      }
+      
+      if self.isKing &&  self.boardPosition.row > 1 && self.boardPosition.column < 6 && RuleManager.boardLocation[self.boardPosition.row - 1][self.boardPosition.column + 1] == .red && RuleManager.boardLocation[self.boardPosition.row - 2][self.boardPosition.column + 2] == .free{
         return true
       }
     }
@@ -88,13 +144,15 @@ extension Piece {
     guard RuleManager.boardLocation[position.row][position.column] == .free
       else{ return false }
     
-    if self.pieceColor == .red {
+    if self.pieceColor == .red || self.isKing {
       
       if position.row == self.boardPosition.row - 1 && (position.column == self.boardPosition.column - 1 || position.column == self.boardPosition.column + 1) {
         return true
       }
       
-    }else{
+    }
+    
+    if self.pieceColor == .blue || self.isKing{
       if position.row == self.boardPosition.row + 1 && (position.column == self.boardPosition.column - 1 || position.column == self.boardPosition.column + 1) {
         return true
       }
@@ -123,6 +181,12 @@ extension Piece {
     
     UIView.animate(withDuration: 0.3) {
       self.frame = RuleManager.boardCells[key]!.frame
+    }
+    
+    if !self.isKing {
+      if (self.pieceColor == .red && position.row == 0) || (self.pieceColor == .blue && position.row == 7) {
+        self.isKing = true
+      }
     }
   }
   
@@ -160,6 +224,40 @@ extension Piece {
       return
     }
     
+    
+    //Eating Red as king
+    if self.isKing && position.row < 7 && position.column < 7 && RuleManager.boardLocation[position.row + 1][position.column + 1] == .red
+      && self.boardPosition.row == position.row + 2
+      && self.boardPosition.column == position.column + 2{
+      
+      RuleManager.boardLocation[position.row + 1][position.column + 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column + 1}.first!
+      piece.removeFromBoard()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    if self.isKing && position.row < 7 && position.column > 0 && RuleManager.boardLocation[position.row + 1][position.column - 1] == .red
+      && self.boardPosition.row == position.row + 2
+      && self.boardPosition.column == position.column - 2{
+      
+      RuleManager.boardLocation[position.row + 1][position.column - 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column - 1}.first!
+      piece.removeFromBoard()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    
+    
+    
+    
     //Eating blue
     if  position.row < 7 && position.column < 7 && RuleManager.boardLocation[position.row + 1][position.column + 1] == .blue
       && self.boardPosition.row == position.row + 2
@@ -182,6 +280,35 @@ extension Piece {
       RuleManager.boardLocation[position.row + 1][position.column - 1] = .free
       
       let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row + 1 && $0.boardPosition.column == position.column - 1}.first!
+      piece.removeFromBoard()
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    //Eating Blue as King
+    if self.isKing &&  position.row > 0 && position.column < 7 && RuleManager.boardLocation[position.row - 1][position.column + 1] == .blue
+      && self.boardPosition.row == position.row - 2
+      && self.boardPosition.column == position.column + 2{
+      
+      RuleManager.boardLocation[position.row - 1][position.column + 1] = .free
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column + 1}.first!
+      
+      piece.removeFromBoard()
+      
+      let indexPiece = RuleManager.pieces.index(of: piece)
+      RuleManager.pieces.remove(at: indexPiece!)
+      
+      return
+    }
+    
+    if self.isKing &&  position.row > 0 && position.column > 0 && RuleManager.boardLocation[position.row - 1][position.column - 1] == .blue
+      && self.boardPosition.row  == position.row - 2
+      && self.boardPosition.column == position.column - 2 {
+      RuleManager.boardLocation[position.row - 1][position.column - 1] = .free
+      
+      let piece = RuleManager.pieces.filter{ $0.boardPosition.row == position.row - 1 && $0.boardPosition.column == position.column - 1}.first!
       piece.removeFromBoard()
       let indexPiece = RuleManager.pieces.index(of: piece)
       RuleManager.pieces.remove(at: indexPiece!)
