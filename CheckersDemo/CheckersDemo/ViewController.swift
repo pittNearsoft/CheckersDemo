@@ -106,6 +106,8 @@ class ViewController: UIViewController {
       if piece.canMove(to: position) {
         piece.move(to: position)
         
+      }else if piece.canEat(in: position){
+        print("It can eat!")
       }else{
         piece.returnToOriginalPosition()
       }

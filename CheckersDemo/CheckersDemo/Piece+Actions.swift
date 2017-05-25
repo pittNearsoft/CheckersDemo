@@ -13,13 +13,23 @@ extension Piece {
     guard RuleManager.boardLocation[position.row][position.column] == .free
       else{ return false }
     
+    
+    
     if self.pieceColor == .red {
+      guard self.boardPosition.row == position.row + 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)  else {
+        return false
+      }
+      
       
       if RuleManager.boardLocation[position.row - 1][position.column + 1] == .blue || RuleManager.boardLocation[position.row - 1][position.column - 1] == .blue {
         return true
       }
       
     }else{
+      guard self.boardPosition.row == position.row - 2 && (self.boardPosition.column == position.column - 2 || self.boardPosition.column == position.column + 2)  else {
+        return false
+      }
+      
       if RuleManager.boardLocation[position.row + 1][position.column + 1] == .red || RuleManager.boardLocation[position.row + 1][position.column - 1] == .red {
         return true
       }
