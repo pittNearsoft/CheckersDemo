@@ -9,23 +9,20 @@
 import UIKit
 
 extension Piece {
-  func canEat(Piece pieceToEat: Piece) -> Bool {
+  func canEat(in position: BoardPosition) -> Bool {
+    guard RuleManager.boardLocation[position.row][position.column] == .free
+      else{ return false }
     
     if self.pieceColor == .red {
       
-      
-      guard RuleManager.boardLocation[self.boardPosition.row-2][self.boardPosition.column-2] == .free ||
-        RuleManager.boardLocation[self.boardPosition.row+1][self.boardPosition.column+1] == .free
-        else { return false }
-      
-      
-      if (pieceToEat.boardPosition.column == self.boardPosition.column - 1 ||  pieceToEat.boardPosition.column == self.boardPosition.column + 1)
-        && (pieceToEat.boardPosition.row == self.boardPosition.row - 1){
+      if RuleManager.boardLocation[position.row - 1][position.column + 1] == .blue || RuleManager.boardLocation[position.row - 1][position.column - 1] == .blue {
         return true
       }
       
     }else{
-      
+      if RuleManager.boardLocation[position.row + 1][position.column + 1] == .red || RuleManager.boardLocation[position.row + 1][position.column - 1] == .red {
+        return true
+      }
     }
     
     
@@ -34,17 +31,20 @@ extension Piece {
   }
   
   func canMove(to position: BoardPosition) -> Bool {
+
+    guard RuleManager.boardLocation[position.row][position.column] == .free
+      else{ return false }
+    
     if self.pieceColor == .red {
       
-      if RuleManager.boardLocation[position.row][position.column] == .free
-        && (position.row == self.boardPosition.row - 1 ||  position.row == self.boardPosition.row + 1)
-        && (position.column == self.boardPosition.column - 1 ||  position.column == self.boardPosition.column + 1) {
+      if position.row == self.boardPosition.row - 1 && (position.column == self.boardPosition.column - 1 || position.column == self.boardPosition.column + 1) {
         return true
       }
       
-      
     }else{
-      
+      if position.row == self.boardPosition.row + 1 && (position.column == self.boardPosition.column - 1 || position.column == self.boardPosition.column + 1) {
+        return true
+      }
     }
     
     return false
@@ -64,13 +64,22 @@ extension Piece {
     
     
     RuleManager.boardLocation[self.boardPosition.row][self.boardPosition.column] = .free
-    RuleManager.boardLocation[position.row][position.column] = .taken
+    RuleManager.boardLocation[position.row][position.column] = (self.pieceColor == .red) ? .red : .blue
     
     self.boardPosition = position
     
     UIView.animate(withDuration: 0.3) {
       self.frame = RuleManager.boardCells[key]!.frame
     }
+  }
+  
+  private func eat(Piece piece: Piece) {
+    
+  }
+  
+  func move(to position: BoardPosition, AndEatPiece piece: Piece) {
+    move(to: position)
+    eat(Piece: piece)
   }
   
 }
