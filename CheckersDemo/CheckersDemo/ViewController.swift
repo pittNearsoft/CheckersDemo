@@ -17,11 +17,33 @@ class ViewController: UIViewController {
   let numberOfPiecesPerColor  = 12
   var boardView = UIView()
   
+  var vsComputer = true
+  let cpu = ComputerPlayer()
+  
   @IBOutlet weak var turnForLabel: UILabel!
   
   var currentTurn = PieceColor.red
   @IBOutlet weak var currentTurnLabel: UILabel!
 		
+  let listMovesCPU = [BoardPosition(row: 3, column: 3),
+                      BoardPosition(row: 3, column: 3),
+                      BoardPosition(row: 5, column: 5),
+                      BoardPosition(row: 3, column: 5),
+                      BoardPosition(row: 3, column: 5),
+                      BoardPosition(row: 5, column: 7),
+                      BoardPosition(row: 7, column: 5),
+                      BoardPosition(row: 5, column: 3)]
+  
+  let listOriginCPU = [BoardPosition(row: 2, column: 2),
+                       BoardPosition(row: 1, column: 1),
+                       BoardPosition(row: 3, column: 3),
+                       BoardPosition(row: 2, column: 6),
+                       BoardPosition(row: 1, column: 7),
+                       BoardPosition(row: 3, column: 5),
+                       BoardPosition(row: 5, column: 7),
+                       BoardPosition(row: 7, column: 5)]
+  
+  var cpuTurn = 0
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -66,7 +88,7 @@ class ViewController: UIViewController {
 
     let piece = gestureRecognizer.view! as! Piece
     
-    guard piece.pieceColor == currentTurn else {
+    guard piece.pieceColor == currentTurn || (currentTurn == .blue && vsComputer) else {
       return
     }
     
@@ -102,7 +124,7 @@ class ViewController: UIViewController {
       
       print(key)
       
-      guard let cellView = RuleManager.boardCells[key]
+      guard RuleManager.boardCells[key] != nil
         else {
           piece.returnToOriginalPosition()
           return
@@ -125,11 +147,44 @@ class ViewController: UIViewController {
         piece.returnToOriginalPosition()
       }
 
+      if currentTurn == .blue && vsComputer && cpuTurn < listMovesCPU.count {
+//        let bestMove: BoardPosition
+//        let bestPiece: Piece
+//        let board = RuleManager.boardLocation
+//        (bestMove, bestPiece, _) = cpu.engine.findBestMove(board, player: .blue)
+//        validateCPUMove(WithPosition: bestMove, andPiece: bestPiece)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4 , execute: {
+          let cpuPiece = RuleManager.pieces.filter{ $0.boardPosition.row == self.listOriginCPU[self.cpuTurn].row && $0.boardPosition.column == self.listOriginCPU[self.cpuTurn].column }.first!
+          
+          self.validateCPUMove(WithPosition: self.listMovesCPU[self.cpuTurn], andPiece: cpuPiece)
+          self.cpuTurn += 1
+        })
+        
+        
+      }
       
     }
   }
   
   //MARK: - Helpers
+  func validateCPUMove(WithPosition position: BoardPosition, andPiece piece: Piece) {
+
+    if piece.canMove(to: position) {
+      piece.move(to: position)
+      changeTurn()
+    }else if piece.canEat(in: position){
+      piece.eat(at: position)
+      
+      if !piece.canEatAgain() {
+        checkIfGameEnds()
+      }
+      
+      
+    }
+  }
+  
+  
   func changeTurn() {
     
     let pieces = RuleManager.pieces.filter { $0.pieceColor == currentTurn}
@@ -155,8 +210,6 @@ class ViewController: UIViewController {
     for piece in opponentPieces {
       piece.isUserInteractionEnabled = true
     }
-    
-
   }
   
   func checkIfGameEnds() {

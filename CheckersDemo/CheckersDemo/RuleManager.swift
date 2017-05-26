@@ -8,8 +8,10 @@
 
 import UIKit
 
+typealias Board = [[BoardState]]
+
 class RuleManager {
-  static var boardLocation: [[BoardLocation]] = [[.blue,  .unused, .blue,   .unused, .blue,   .unused, .blue,   .unused],
+  static var boardLocation: Board = [[.blue,  .unused, .blue,   .unused, .blue,   .unused, .blue,   .unused],
                                                 [.unused, .blue,   .unused, .blue,   .unused, .blue,   .unused, .blue],
                                                 [.blue,   .unused, .blue,   .unused, .blue,   .unused, .blue,   .unused],
                                                 [.unused, .free,   .unused, .free,   .unused, .free,   .unused, .free],
@@ -25,7 +27,7 @@ class RuleManager {
   
 }
 
-enum BoardLocation {
+enum BoardState {
   case blue
   case red
   case free
