@@ -154,15 +154,30 @@ class ViewController: UIViewController {
 //        (bestMove, bestPiece, _) = cpu.engine.findBestMove(board, player: .blue)
 //        validateCPUMove(WithPosition: bestMove, andPiece: bestPiece)
         
+        
+        
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4 , execute: {
           let cpuPiece = RuleManager.pieces.filter{ $0.boardPosition.row == self.listOriginCPU[self.cpuTurn].row && $0.boardPosition.column == self.listOriginCPU[self.cpuTurn].column }.first!
           
           self.validateCPUMove(WithPosition: self.listMovesCPU[self.cpuTurn], andPiece: cpuPiece)
           self.cpuTurn += 1
+          
+          if self.currentTurn == .blue{
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2 , execute: {
+              let cpuPiece = RuleManager.pieces.filter{ $0.boardPosition.row == self.listOriginCPU[self.cpuTurn].row && $0.boardPosition.column == self.listOriginCPU[self.cpuTurn].column }.first!
+              
+              self.validateCPUMove(WithPosition: self.listMovesCPU[self.cpuTurn], andPiece: cpuPiece)
+              self.cpuTurn += 1
+              
+              
+            })
+          }
         })
         
         
       }
+      
+      
       
     }
   }
